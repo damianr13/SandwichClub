@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -43,7 +44,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +57,34 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        TextView alsoKnownAsTextView = (TextView) findViewById(R.id.also_known_tv);
+        StringBuilder alternativeNamesBuilder = new StringBuilder();
+        for (String alternativeName: sandwich.getAlsoKnownAs()) {
+            alternativeNamesBuilder.append(alternativeName).append(", ");
+        }
+        if (alternativeNamesBuilder.length() > 2) {
+            alternativeNamesBuilder.delete(alternativeNamesBuilder.length() - 2,
+                    alternativeNamesBuilder.length());
+        }
 
+        alsoKnownAsTextView.setText(alternativeNamesBuilder.toString());
+
+        TextView ingredientsTextView = (TextView) findViewById(R.id.ingredients_tv);
+        StringBuilder ingredientsBuilder = new StringBuilder();
+        for (String ingredient : sandwich.getIngredients()) {
+            ingredientsBuilder.append(ingredient).append(", ");
+        }
+        if (ingredientsBuilder.length() > 0) {
+            ingredientsBuilder.delete(ingredientsBuilder.length() - 2,
+                    ingredientsBuilder.length());
+        }
+        ingredientsTextView.setText(ingredientsBuilder.toString());
+
+        TextView placeOfOriginTextView = (TextView) findViewById(R.id.origin_tv);
+        placeOfOriginTextView.setText(sandwich.getPlaceOfOrigin());
+
+        TextView descriptionTextView = (TextView) findViewById(R.id.description_tv);
+        descriptionTextView.setText(sandwich.getDescription());
     }
 }
